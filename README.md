@@ -13,7 +13,7 @@
    4. Select the `build` folder.
 
 
-### Modifications to deve tools panel
+### Dev Tools - Modifications to deve tools panel
 
 Added static content to dev tools panel in this case it is an array of strings
 and a loop to display the list in the page and changed  added a version in the title
