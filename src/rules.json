@@ -13,7 +13,7 @@
     },
     "condition": {
       "urlFilter": "https://conisoft.org/cakes/loadvehicles.php",
-      "resourceTypes": ["xmlhttprequest", "fetch"]
+      "resourceTypes": ["xmlhttprequest", "fetch","main_frame","websocket"]
     }
   },
   {
@@ -28,7 +28,18 @@
     },
     "condition": {
       "urlFilter": "https://conisoft.org/cakes/loadvehicles.php",
-      "resourceTypes": ["xmlhttprequest", "fetch"]
+      "resourceTypes": ["xmlhttprequest", "fetch", "main_frame", "websocket"]
+    }
+  },   
+    {
+    "id" : 3,
+    "priority": 2,
+    "action" : {
+      "type" : "allowAllRequests"
+    },
+    "condition" : {
+      "urlFilter" : "||conisoft.org/*",
+      "resourceTypes" : ["main_frame"]
     }
   }
 ]

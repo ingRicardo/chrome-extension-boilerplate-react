@@ -3,9 +3,12 @@
   "name": "Chrome Extension with React & Webpack",
   "description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
   "permissions": [
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
   ],
-  
+  "host_permissions": [
+  "https://conisoft.org/*"
+],
   "declarative_net_request": {
     "rule_resources": [
         {
