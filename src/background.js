@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-    console.log('Service worker installed.');
+    console.log('background. Service worker installed.');
   });
   
   chrome.webRequest.onBeforeRequest.addListener(
