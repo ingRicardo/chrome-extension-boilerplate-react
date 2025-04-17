@@ -3,9 +3,9 @@
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
     // Optional: Filter requests based on URL or other criteria
-    // if (details.url.includes("your-specific-api-endpoint")) {
-    //   console.log("Intercepting request:", details);
-    // }
+  //   if (details.url.includes("https://api.github.com/users/hadley/orgs")) {
+ //     console.log("Intercepting request:", details);
+ //    }
     return {}; // Continue the request
   },
   { urls: ["<all_urls>"] },
@@ -26,64 +26,39 @@ chrome.webRequest.onHeadersReceived.addListener(
   ["responseHeaders"]
 );
 
+
+
 chrome.webRequest.onCompleted.addListener(
-  async function(details) {
+  async function myListener(details) {
     const contentTypeHeader = details.responseHeaders?.find(header => header.name.toLowerCase() === 'content-type');
     if (contentTypeHeader && contentTypeHeader.value.toLowerCase().includes('application/json')) {
       try {
+        
         const response = await fetch(details.url);
         let responseBody = await response.json();
-
+  
         // --- Your JSON modification logic here ---
         console.log("Original JSON:", responseBody);
-
+  
         // Example: Add a new field
         responseBody.modifiedByExtension = true;
-
+  
         // Example: Modify an existing field
-        if (responseBody.someKey) {
-          responseBody.someKey = "Modified Value by Extension";
+        if (responseBody[0].model) {
+          responseBody[0].model = "Modified Value by Extension";
         }
-
+  
         console.log("Modified JSON:", responseBody);
         const modifiedBody = JSON.stringify(responseBody);
-
-        // Use declarativeNetRequest to redirect the original request to a data URL
-        chrome.declarativeNetRequest.updateRules({
-          removeRuleIds: [details.requestId], // Clean up previous rule if any
-          addRules: [{
-            id: details.requestId,
-            priority: 1,
-            action: {
-              type: "modifyHeaders",
-              responseHeaders: [
-                { name: "Content-Type", value: "application/json" },
-                { name: "Content-Length", value: String(modifiedBody.length) }
-              ]
-            },
-            condition: {
-              requestIds: [details.requestId]
-            }
-          },
-          {
-            id: details.requestId + 1, // Add a second rule for redirecting
-            priority: 2,
-            action: {
-              type: "redirect",
-              redirect: {
-                url: 'data:application/json;charset=utf-8,' + encodeURIComponent(modifiedBody)
-              }
-            },
-            condition: {
-              requestIds: [details.requestId]
-            }
-          }]
-        });
-
+  
       } catch (error) {
         console.error("Error processing JSON:", error);
       }
     }
+    // IMPORTANT: Remove the listener when done
+
+      chrome.webRequest.onCompleted.removeListener(myListener);
+
   },
   { urls: ["<all_urls>"] },
   ["responseHeaders"]
