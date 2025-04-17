@@ -20,6 +20,8 @@ const Newtab = () => {
           Learn React!
         </a>
         <h6>The color of this paragraph is defined using SASS.</h6>
+        <span>Test URL:</span>
+        <a href='https://conisoft.org/cakes/loadvehicles.php'> https://conisoft.org/cakes/loadvehicles.php</a>
       </header>
     </div>
   );

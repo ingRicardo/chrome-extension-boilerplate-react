@@ -1,9 +1,18 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Chrome Extension with React & Webpack",
-  "description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
+  "description": "Modifies JSON responses from a specific URL.",
   "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "scripting",
+    "activeTab",
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
@@ -23,9 +32,8 @@
   ],
   "devtools_page": "devtools.html",
   "web_accessible_resources": [
-    {
-      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
-      "matches": []
-    }
+   "content.styles.css", "icon-128.png", "icon-34.png"
+    
+    
   ]
 }
