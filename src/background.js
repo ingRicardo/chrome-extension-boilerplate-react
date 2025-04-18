@@ -1,5 +1,3 @@
-
-
 chrome.webRequest.onBeforeRequest.addListener(
   function (details) {
     // Optional: Filter requests based on URL or other criteria
@@ -55,13 +53,13 @@ chrome.webRequest.onCompleted.addListener(
         }
 
         console.log("Modified JSON:", responseBody);
-        
+        chrome.tabs.create({ url: 'data:application/json,' + encodeURIComponent( JSON.stringify(responseBody, null, 2)  ) });
 
       } catch (error) {
         console.error("Error processing JSON:", error);
       }
       count++;
-   
+    
       console.log("async call :" + count);
     }
 
@@ -71,3 +69,4 @@ chrome.webRequest.onCompleted.addListener(
   { urls: ["<all_urls>"] },
   ["responseHeaders"]
 );
+
