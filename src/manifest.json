@@ -7,7 +7,7 @@
     "declarativeNetRequestFeedback"
   ],
   "host_permissions": [
-  "https://conisoft.org/*"
+  "*://*/"
 ],
   "declarative_net_request": {
     "rule_resources": [
