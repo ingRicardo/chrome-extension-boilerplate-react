@@ -59,6 +59,7 @@ var server = new WebpackDevServer(
     hot: false,
     liveReload: false,
     client: false,
+    webSocketServer: false,
     // From here and below the rest of the options don't need changing, just posted the most important ones here for clarity
     host: 'localhost',
     port: env.PORT,
