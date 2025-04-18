@@ -10,6 +10,9 @@ chrome.webRequest.onBeforeRequest.addListener(
   ["requestBody"] // If you need to modify request body, include this
 );
 
+
+ 
+
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
     // Check if the Content-Type indicates a JSON response
@@ -31,13 +34,6 @@ chrome.webRequest.onCompleted.addListener(
     if (contentTypeHeader && contentTypeHeader.value.toLowerCase().includes('application/json')) {
       try {
         console.log("Intercepting request:", details.url);
-
-        fetch(details.url)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Original JSON:", data);
-          })
-          .catch(console.error);
 
         const response = await fetch(details.url);
         let responseBody = await response.json();
