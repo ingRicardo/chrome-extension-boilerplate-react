@@ -1,0 +1,22 @@
+[
+    {
+      "id": 1,
+      "priority": 1,
+      "action": {
+        "type": "modifyHeaders",
+        "responseHeaders": [
+          {
+            "name": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+          
+        ]
+      },
+      "condition": {
+        "urlFilter": "https://conisoft.org/cakes/loadvehicles.php",
+        "resourceTypes": ["xmlhttprequest", "fetch"]
+      }
+    }
+  ]
+
+  
