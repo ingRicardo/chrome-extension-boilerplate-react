@@ -27,7 +27,6 @@
       originalSend.apply(this, args);
     };
     console.log("XHR created:", xhr); // Log the XHR object for debugging
-    //xhr.overrideMimeType("text/plain; charset=x-user-defined");
 
     return xhr;
   };
@@ -37,13 +36,7 @@
     // Example modification: Adding a new property
     json.modifiedByExtension = true;
     json[0].make = "Modified by declarativeNetRequest!";
-    if (json.items && Array.isArray(json.items)) {
-      json.items.forEach(item => {
-        item.make = "Processed by declarativeNetRequest!";
-      });
-    }
     console.log("Modifying JSON:", json);
-
     return json;
   }
 
