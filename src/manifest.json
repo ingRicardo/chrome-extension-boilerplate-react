@@ -3,7 +3,38 @@
   "name": "Chrome Extension with React & Webpack",
   "description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
   "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
+  "permissions": [
+    "declarativeNetRequest",
+    "activeTab",
+    "storage",
+    "tabs",
+    "webNavigation",
+    "alarms",
+    "notifications",
+    "nativeMessaging",
+    "downloads",
+    "unlimitedStorage",
+    "cookies",
+    "gcm",
+    "webRequest",
+    "sidePanel",
+    "declarativeNetRequestWithHostAccess",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ], 
+   "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+
+  "background": { "service_worker": "background.js" },
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
@@ -17,15 +48,18 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["contentScript.bundle.js"],
-      "css": ["content.styles.css"]
+      "js": ["content.js"],
+      "css": ["content.styles.css"],
+       "run_at": "document_start"
     }
   ],
   "devtools_page": "devtools.html",
-  "web_accessible_resources": [
-    {
-      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
-      "matches": []
-    }
-  ]
+  "web_accessible_resources":  
+    [
+      {
+        "resources":  ["content.styles.css", "icon-128.png", "icon-34.png"],
+        "matches": ["<all_urls>"]
+      }
+    ]
+ 
 }
