@@ -23,8 +23,10 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["contentScript.bundle.js"],
-      "css": ["content.styles.css"]
+      "js": ["content.js"],
+      "css": ["content.styles.css"],
+      "run_at": "document_start"
+
     }
   ],
   "devtools_page": "devtools.html",

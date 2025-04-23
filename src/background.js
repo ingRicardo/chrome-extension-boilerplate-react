@@ -47,7 +47,7 @@ chrome.webRequest.onHeadersReceived.addListener(
   const contentTypeHeader = details.responseHeaders.find(header => header.name.toLowerCase() === 'content-type');
     if (contentTypeHeader && contentTypeHeader.value.toLowerCase().includes('application/json')) {
     // Store the response headers for later use
-      chrome.storage.local.set({ [`responseHeaders-${details.requestId}`]: details.responseHeaders });
+    //  chrome.storage.local.set({ [`responseHeaders-${details.requestId}`]: details.responseHeaders });
 
       console.log("Storing headers for requestId:", details.requestId, "Headers:", details.responseHeaders);
      // console.log(">=== " + chrome.storage.local.get([`responseHeaders-${details.requestId}`]));
