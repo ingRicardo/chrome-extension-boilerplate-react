@@ -1,7 +1,8 @@
 
+
 let jsonval=null
 
-fetch("https://conisoft.org/cakes/loadvehicles.php")
+fetch("https://jsonplaceholder.typicode.com/todos/1")
   // Retrieve its body as ReadableStream
   .then((response) => response.body)
   .then((body) => {
@@ -22,10 +23,10 @@ fetch("https://conisoft.org/cakes/loadvehicles.php")
             // Modify the response data here
             let text = decoder.decode(value, { stream: true });
             text = text.replace(/"fgfgfgfg"/i, '"bar"');
-            console.log("text mod -->"+text); // Process chunk
-          //  jsonval=text;
+            console.log("fetch text mod -->",text); // Process chunk
+            jsonval=text;
             var res= encoder.encode(text);
-            jsonval= res;
+            //jsonval= res;
             // Enqueue the next data chunk into our target stream
             controller.enqueue(res);
             return pump();
@@ -39,62 +40,52 @@ fetch("https://conisoft.org/cakes/loadvehicles.php")
   .catch((err) => console.error(err));
 
 
-const targets = {urls: ['https://conisoft.org/cakes/loadvehicles.php'], types: ['xmlhttprequest']};
-
-chrome.webRequest.onHeadersReceived.addListener(
-  function (details) {
-  // Check if the response content type is JSON
-  const contentTypeHeader = details.responseHeaders.find(header => header.name.toLowerCase() === 'content-type');
-    if (contentTypeHeader && contentTypeHeader.value.toLowerCase().includes('application/json')) {
-    // Store the response headers for later use
-    //  chrome.storage.local.set({ [`responseHeaders-${details.requestId}`]: details.responseHeaders });
-
-      console.log("Storing headers for requestId:", details.requestId, "Headers:", details.responseHeaders);
-     // console.log(">=== " + chrome.storage.local.get([`responseHeaders-${details.requestId}`]));
-      return { responseHeaders: details.responseHeaders }; // Let the headers pass through
-    }
-  },
-  { urls: ["<all_urls>"] },
-  ["responseHeaders"]
-);
+const targets = {urls: ['https://jsonplaceholder.typicode.com/','https://jsonplaceholder.typicode.com/todos/1'], types: ['xmlhttprequest']};
 
 
 chrome.webRequest.onBeforeRequest.addListener(
    function myListener(details) {
 
-        try {
-          const decoder = new TextDecoder();
-          console.log("details ==> ", details);
- 
-          if(details.response){
-            console.log("response body ==> ", details.response.body);
-          }
-          if(details.requestBody){
-            var postedString = decodeURIComponent(String.fromCharCode.apply(null,
-              new Uint8Array(details.requestBody.raw[0].bytes)));
-            console.log("Request Body:", postedString);
-          }
-          const responseBody = decoder.decode( jsonval);
-          const jsonBody = JSON.parse(responseBody);
+    //const targetUrl = "https://jsonplaceholder.typicode.com/";
+    //if (details.url.includes(targetUrl)) {
+      console.log("details ==> ", details);
+    //  console.log("Request URL ::::::::::::::::::::::::: " + details.url);
+      try {
+        const response = jsonval; // fetch(details.url);
+        let data =  JSON.parse(response); //response.json();
+        console.log("onBeforeRequest Response JSON:", data);
+        // Modify the JSON data here
+        data.message = "JSON data overridden by the extension!";
+        data.newField = "This is added by the extension.";
+       // delete data.oldField;
 
-          // Modify the JSON body here
-        //  console.log("Original JSON:", jsonBody);
-          jsonBody.modified = true;
-          jsonBody[0].make = "This value has been changed!";
+        // Convert the modified data back to a JSON string
+        const modifiedBody = JSON.stringify(data);
+        const encoder = new TextEncoder();
+        const encodedBody = encoder.encode(modifiedBody);
 
-          const encoder = new TextEncoder();
-          const modifiedResponseBody = encoder.encode(JSON.stringify(jsonBody));
-
-
-          console.log("Modified JSON:", modifiedResponseBody);
-      //    return { response: modifiedResponseBody };
-        } catch (error) {
-          console.error("Error parsing or modifying JSON:", error);
-          // Optionally, you might want to return the original response here
-        //  return { response: details.response.body };
-        }
-        
+        // Create a new ReadableStream with the modified body
+        const readableStream = new ReadableStream({
+          start(controller) {
+            controller.enqueue(encodedBody);
+            controller.close();
+          },
+        });
+        console.log("onBeforeRequest Modified JSON: ", modifiedBody);
+        console.log("onBeforeRequest readableStream: ", readableStream);
         return {};
+        // Return a response with the modified body
+      /*  return {
+          responseHeaders: details.responseHeaders,
+          body: readableStream,
+        };*/
+      } catch (error) {
+        console.error("Error overriding JSON:", error);
+      }
+   // }
+
+
+
 
   },
   targets,
@@ -107,7 +98,7 @@ chrome.webRequest.onCompleted.addListener(
     const contentTypeHeader = details.responseHeaders?.find(header => header.name.toLowerCase() === 'content-type');
     if (contentTypeHeader && contentTypeHeader.value.toLowerCase().includes('application/json')) {
       try {
-        console.log("Intercepting request:", details.url);
+  //      console.log("onCompleted Intercepting request:", details.url);
 
         const response = await fetch(details.url);
         let responseBody = await response.json();
@@ -117,20 +108,20 @@ chrome.webRequest.onCompleted.addListener(
         responseBody.modifiedByExtension = true;
 
         // Example: Modify an existing field
-        if (responseBody[0].model) {
+      /*  if (responseBody[0].model) {
           responseBody[0].model = "Modified Value by Extension";
           responseBody[0].make = "MERCEDES BENZ";
         }
-
-        console.log("Modified JSON:", responseBody);
-        chrome.tabs.create({ url: 'data:application/json,' + encodeURIComponent( JSON.stringify(responseBody, null, 2)  ) });
+        */
+    //    console.log("onCompleted Modified JSON:", responseBody);
+      //  chrome.tabs.create({ url: 'data:application/json,' + encodeURIComponent( JSON.stringify(responseBody, null, 2)  ) });
 
       } catch (error) {
         console.error("Error processing JSON:", error);
       }
       count++;
     
-      console.log("async call :" + count);
+    //  console.log("async call :" + count);
     }
 
     // IMPORTANT: Remove the listener when done
@@ -139,4 +130,5 @@ chrome.webRequest.onCompleted.addListener(
   { urls: ["<all_urls>"] },
   ["responseHeaders"]
 );
+
 
