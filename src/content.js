@@ -1,22 +1,8 @@
 (function() {
 
     console.log("Content script loaded!",window.location.href);
-
-   fetch(window.location.href)
-   .then(response => response.text())
-   .then(html => {
-     const parser = new DOMParser();
-     const doc = parser.parseFromString(html, 'text/html');
-     const bodyText = doc.body.textContent;
-    
-     if (bodyText.includes('https://jsonplaceholder.typicode.com/todos/1')) {
-        //console.log(bodyText);
-        let url = 'https://jsonplaceholder.typicode.com/todos/1'
-        getData(url);
-     }
-
-   });
-             
+    if (window.location.href.includes("https://jsonplaceholder.typicode.com/")) {
+      let url = 'https://jsonplaceholder.typicode.com/todos/1';       
       async function getData(findUrl) {
         const url = findUrl;
         try {
@@ -33,7 +19,8 @@
           console.error(error.message);
         }
       }
-  
+      getData(url);
+    }
   })();
   
   
