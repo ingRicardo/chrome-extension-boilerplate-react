@@ -1,0 +1,32 @@
+{
+    "data" : [
+        {
+
+            "browser": "chrome or firefox or edge",
+            "storageType": "sync or local",
+            "contextMenuContexts": ["chrome.contextMenus.ContextType[]"],
+            "env": "local or beta  or prod",
+            "WEB_URL": "string",
+            "OTHER_WEB_URLS": ["string[]"],
+            "logLevel":  "info",
+            "LANDING_PAGE_BASE_URL": "string"
+
+        },
+        {
+
+            "browser": "chrome or firefox or edge",
+            "storageType": "sync or local",
+            "contextMenuContexts": ["chrome.contextMenus.ContextType[]"],
+            "env": "local or beta  or prod",
+            "WEB_URL": "string",
+            "OTHER_WEB_URLS": ["string[]"],
+            "logLevel":  "info",
+            "LANDING_PAGE_BASE_URL": "string"
+
+        }
+
+
+     ]
+    
+
+}
