@@ -11,7 +11,7 @@ var WebpackDevServer = require('webpack-dev-server'),
 
 var options = config.chromeExtensionBoilerplate || {};
 var excludeEntriesToHotReload = options.notHotReload || [];
-
+/*
 for (var entryName in config.entry) {
   if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
     config.entry[entryName] = [
@@ -20,6 +20,23 @@ for (var entryName in config.entry) {
     ].concat(config.entry[entryName]);
   }
 }
+*/
+// Set hot entry points manually
+for (let entryName in config.entry) {
+  if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
+    // Enable HMR for all entries except those in the "notHMR" list
+    // See "Manual entry points" in https://webpack.js.org/guides/hot-module-replacement/#enabling-hmr
+    config.entry[entryName] = [
+      'webpack/hot/dev-server.js',
+      `webpack-dev-server/client/index.js?hot=true&hostname=localhost&port=${env.PORT}`,
+    ].concat(config.entry[entryName]);
+  }
+}
+
+// Add HotModuleReplacementPlugin to plugin list
+config.plugins = [new webpack.HotModuleReplacementPlugin({})].concat(
+  config.plugins || []
+);
 
 delete config.chromeExtensionBoilerplate;
 
@@ -27,13 +44,23 @@ var compiler = webpack(config);
 
 var server = new WebpackDevServer(
   {
-    https: false,
+    /*
+    https: true,
     hot: true,
     liveReload: false,
     client: {
       webSocketTransport: 'sockjs',
     },
     webSocketServer: 'sockjs',
+    host: 'localhost',
+    port: env.PORT, */
+    https: false,
+    // We do not enable hot mode because we are defining above HMR only for some entries
+    hot: false,
+    liveReload: false,
+    client: false,
+    webSocketServer: false,
+    // From here and below the rest of the options don't need changing, just posted the most important ones here for clarity
     host: 'localhost',
     port: env.PORT,
     static: {
