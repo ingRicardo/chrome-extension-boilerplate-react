@@ -16,31 +16,89 @@ import { getAbsoluteUrl,
 } from "./utils";
 
 
+  // Example usage within an async function
+  async function getData(url) {
+    let request;
+    try {
+      const result = await fetch(url);
+      //console.log("Data:", result);
+
+      request = result.clone();
+      console.log("cloning.....", request);
+    
+      const urlc = getAbsoluteUrl(url);
+      const method = request.method;
+      console.log("get urlc ==> ", urlc);
+      console.log("get method ====> ",method);
+      console.log("request body => ", request.body);
+
+
+      const matchedDelayRulePair = getMatchedDelayRule({
+        url: url,
+        method: 'GET',
+        type: "fetch",
+        initiator: location.origin, // initiator=origin. Should now contain port and protocol
+      });
+
+      if (matchedDelayRulePair) {
+        await applyDelay(matchedDelayRulePair.delay);
+      }
+
+      const originalRequestBody = await request.text();
+               
+      console.log("originalRequestBody ==> "+ originalRequestBody);
+
+  
+ 
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  
+
+
 export const initFetchInterceptor = (debug) => {
+
 
     console.log("initFetchInterceptor ", debug );
 
+    let url = 'https://jsonplaceholder.typicode.com/todos/1';
+    //window.location.href
+    getData(url);
+    
+ 
 
+
+
+
+    /*
     const _fetch = fetch;
     fetch = async (...args) => {
         const [resource, initOptions = {}] = args;
         const getOriginalResponse = () => _fetch(...args);
+        console.log("getOriginalResponse "+ getOriginalResponse);
         try {
              
             
             let request;
-
+            console.log("resource "+ resource);
             if (resource instanceof Request) {
               request = resource.clone();
+              console.log("cloning..");
             } else {
               request = new Request(resource.toString(), initOptions);
+             // console.log("new request ", request);
+           //   console.log("initOptions ", initOptions);
             }
 
-            const url = getAbsoluteUrl(request.url);
+          //  const url = getAbsoluteUrl(request.url);
+            const url = getAbsoluteUrl('https://jsonplaceholder.typicode.com/todos/1');
             const method = request.method;
-
-            console.log("get url ==> ", url);
-            console.log("get method ====> ",method);
+            
+        //    console.log("request body => "+ request.body);
+       //     console.log("get url ==> ", url);
+       //     console.log("get method ====> ",method);
 
       
             const matchedDelayRulePair = getMatchedDelayRule({
@@ -56,7 +114,7 @@ export const initFetchInterceptor = (debug) => {
 
                   // Request body can be sent only for request methods other than GET and HEAD.
             const canRequestBodyBeSent = !["GET", "HEAD"].includes(method);
-            console.log("canRequestBodyBeSent ", canRequestBodyBeSent);
+       //     console.log("canRequestBodyBeSent ", canRequestBodyBeSent);
             const requestRule =
                 canRequestBodyBeSent &&
                 getMatchedRequestRule({
@@ -65,9 +123,16 @@ export const initFetchInterceptor = (debug) => {
                 type: "fetch",
                 initiator: location.origin, // initiator=origin. Should now contain port and protocol
                 });
-                console.log("requestRule ============> ", requestRule);
-            if (requestRule) {
+           //     console.log("requestRule ============> ", requestRule);
+            if (!requestRule) {
+                //console.log("request => "+ request.body);
+
+
+
                 const originalRequestBody = await request.text();
+               
+           //     console.log("originalRequestBody ==> "+ originalRequestBody);
+
                 const requestBody =
                     getCustomRequestBody(requestRule, {
                     method: request.method,
@@ -76,6 +141,8 @@ export const initFetchInterceptor = (debug) => {
                     bodyAsJson: jsonifyValidJSONString(originalRequestBody, true),
                     }) || {};
         
+                console.log("///////// requestBody ==> ", requestBody);
+
                 request = new Request(request.url, {
                     method,
                     body: requestBody,
@@ -89,6 +156,8 @@ export const initFetchInterceptor = (debug) => {
                     integrity: request.integrity,
                 });
         
+             //   console.log("///////// new request ---> ",request);
+
                 notifyRequestRuleApplied({
                     ruleDetails: requestRule,
                     requestDetails: {
@@ -114,6 +183,7 @@ export const initFetchInterceptor = (debug) => {
               let responseHeaders;
               let fetchedResponse;
         
+              
               if (responseRule && shouldServeResponseWithoutRequest(responseRule)) {
                 const contentType = isJSON(responseRule.pairs[0].response.value) ? "application/json" : "text/plain";
                 responseHeaders = new Headers({ "content-type": contentType });
@@ -136,8 +206,12 @@ export const initFetchInterceptor = (debug) => {
                     fetchedResponse = await _fetch(request);
                   } else {
                     fetchedResponse = await getOriginalResponse();
+
+            //        console.log("  fetchedResponse ----------->   ", fetchedResponse);
                   }
         
+
+
                   if (!responseRule) {
                     return fetchedResponse;
                   }
@@ -238,11 +312,11 @@ export const initFetchInterceptor = (debug) => {
 
 
         } catch (err) {
-        debug && console.log("[RQ.fetch] Error in fetch", err);
-        return await getOriginalResponse();
-        }
-    };
-    window.fetch(window.location.href)
+            debug && console.log("[RQ.fetch] Error in fetch", err);
+            return await getOriginalResponse();
+        } 
+    }; */
+
 
 };
 

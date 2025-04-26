@@ -1,6 +1,6 @@
 
-import { matchRuleWithRequest, matchSourceUrl } from "./ruleMatcher";
-import { EXTENSION_MESSAGES, PUBLIC_NAMESPACE } from "./constants";
+import { matchRuleWithRequest, matchSourceUrl } from "./common/ruleMatcher";
+
 export const getAbsoluteUrl = (url) => {
     const dummyLink = document.createElement("a");
     dummyLink.href = url;
@@ -17,11 +17,11 @@ export const getAbsoluteUrl = (url) => {
 
 
   export const getMatchedDelayRule = (requestDetails) => {
-    if (!window[PUBLIC_NAMESPACE]?.delayRules) {
+    if (!window["__REQUESTLY__"]?.delayRules) {
       return null;
     }
   
-    for (const rule of window[PUBLIC_NAMESPACE]?.delayRules) {
+    for (const rule of window["__REQUESTLY__"]?.delayRules) {
       const { isApplied, matchedPair } = matchRuleWithRequest(rule, requestDetails);
   
       return matchedPair;
@@ -32,7 +32,7 @@ export const getAbsoluteUrl = (url) => {
 
 
   export const getMatchedRequestRule = (requestDetails) => {
-    return window[PUBLIC_NAMESPACE]?.requestRules?.findLast(
+    return window["__REQUESTLY__"]?.requestRules?.findLast(
       (rule) =>
         // TODO: Move ruleMatcher outside of service worker
         matchRuleWithRequest(rule, requestDetails)?.isApplied === true
@@ -51,7 +51,7 @@ export const getAbsoluteUrl = (url) => {
     if (typeof requestBody !== "object" || isNonJsonObject(requestBody)) {
       return requestBody;
     }
-  
+    console.log("requestBody  ==> ",requestBody);
     return JSON.stringify(requestBody);
   };
 
@@ -127,9 +127,9 @@ export const getAbsoluteUrl = (url) => {
   
     let sharedState;
     try {
-      sharedState = window.top[PUBLIC_NAMESPACE]?.sharedState ?? {};
+      sharedState = window.top["__REQUESTLY__"]?.sharedState ?? {};
     } catch (e) {
-      sharedState = window[PUBLIC_NAMESPACE]?.sharedState ?? {};
+      sharedState = window["__REQUESTLY__"]?.sharedState ?? {};
     }
   
     const { func: generatedFunction, updatedSharedState } = new Function(
@@ -161,7 +161,7 @@ export const getAbsoluteUrl = (url) => {
       {
         source: "requestly:client",
         action: EXTENSION_MESSAGES.CACHE_SHARED_STATE,
-        sharedState: window[PUBLIC_NAMESPACE]?.sharedState,
+        sharedState: window["__REQUESTLY__"]?.sharedState,
       },
       window.location.href
     );

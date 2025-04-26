@@ -2,11 +2,12 @@
 import { SourceKey, SourceOperator, UrlSource } from "./types";
 import { matchSourceUrl } from "./ruleMatcher";
 
- import config from "./config";
+// import config from "./config";
 
 export const getAllSupportedWebURLs = () => {
-    const webURLsSet = new Set([config.WEB_URL, ...config.OTHER_WEB_URLS]);
-    return [...webURLsSet];
+  /*  const webURLsSet = new Set([config.WEB_URL, ...config.OTHER_WEB_URLS]);
+    return [...webURLsSet]; */
+    return [];
   };
   
   export const isBlacklistedURL = (url: string): boolean => {
