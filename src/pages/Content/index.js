@@ -19,6 +19,7 @@ initFetchInterceptor(isDebugMode);
 
 
 if (window.top === window.self) {
+    console.log(" window.top   ------> "+ window.top);
     window.addEventListener("beforeunload", () => {
       sendCacheSharedStateMessage();
     });

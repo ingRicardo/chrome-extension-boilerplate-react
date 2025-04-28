@@ -10,7 +10,8 @@ import { getAbsoluteUrl,
     notifyOnBeforeRequest,
     getFunctionFromCode,
     isContentTypeJSON,
-    notifyResponseRuleApplied
+    notifyResponseRuleApplied,
+    getMatchedResponseRule
 
 
 } from "./utils";
@@ -39,7 +40,7 @@ import { getAbsoluteUrl,
         type: "fetch",
         initiator: location.origin, // initiator=origin. Should now contain port and protocol
       });
-
+      console.log("matchedDelayRulePair --> "+ matchedDelayRulePair);
       if (matchedDelayRulePair) {
         await applyDelay(matchedDelayRulePair.delay);
       }
@@ -47,8 +48,6 @@ import { getAbsoluteUrl,
       const originalRequestBody = await request.text();
                
       console.log("originalRequestBody ==> "+ originalRequestBody);
-
-  
  
 
     } catch (error) {

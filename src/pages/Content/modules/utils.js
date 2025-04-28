@@ -1,5 +1,8 @@
 
 import { matchRuleWithRequest, matchSourceUrl } from "./common/ruleMatcher";
+//import { EXTENSION_MESSAGES, PUBLIC_NAMESPACE } from "./constants";
+import CONSTANTS from "./constants";
+
 
 export const getAbsoluteUrl = (url) => {
     const dummyLink = document.createElement("a");
@@ -17,11 +20,14 @@ export const getAbsoluteUrl = (url) => {
 
 
   export const getMatchedDelayRule = (requestDetails) => {
-    if (!window["__REQUESTLY__"]?.delayRules) {
+    console.log(" requestDetails -> ", requestDetails);
+    console.log(" PUBLIC_NAMESPACE -> "+ CONSTANTS.PUBLIC_NAMESPACE);
+    console.log("window  -> ",window);
+    if (!window[CONSTANTS.PUBLIC_NAMESPACE]?.delayRules) {
       return null;
     }
-  
-    for (const rule of window["__REQUESTLY__"]?.delayRules) {
+    
+    for (const rule of window[CONSTANTS.PUBLIC_NAMESPACE]?.delayRules) {
       const { isApplied, matchedPair } = matchRuleWithRequest(rule, requestDetails);
   
       return matchedPair;
@@ -32,7 +38,7 @@ export const getAbsoluteUrl = (url) => {
 
 
   export const getMatchedRequestRule = (requestDetails) => {
-    return window["__REQUESTLY__"]?.requestRules?.findLast(
+    return window[CONSTANTS.PUBLIC_NAMESPACE]?.requestRules?.findLast(
       (rule) =>
         // TODO: Move ruleMatcher outside of service worker
         matchRuleWithRequest(rule, requestDetails)?.isApplied === true
@@ -127,9 +133,9 @@ export const getAbsoluteUrl = (url) => {
   
     let sharedState;
     try {
-      sharedState = window.top["__REQUESTLY__"]?.sharedState ?? {};
+      sharedState = window.top[CONSTANTS.PUBLIC_NAMESPACE]?.sharedState ?? {};
     } catch (e) {
-      sharedState = window["__REQUESTLY__"]?.sharedState ?? {};
+      sharedState = window[CONSTANTS.PUBLIC_NAMESPACE]?.sharedState ?? {};
     }
   
     const { func: generatedFunction, updatedSharedState } = new Function(
@@ -161,8 +167,18 @@ export const getAbsoluteUrl = (url) => {
       {
         source: "requestly:client",
         action: EXTENSION_MESSAGES.CACHE_SHARED_STATE,
-        sharedState: window["__REQUESTLY__"]?.sharedState,
+        sharedState: window[CONSTANTS.PUBLIC_NAMESPACE]?.sharedState,
       },
       window.location.href
+    );
+  };
+
+
+  export const getMatchedResponseRule = (requestDetails) => {
+    return window[CONSTANTS.PUBLIC_NAMESPACE]?.responseRules?.findLast(
+      (rule) =>
+        // TODO: Move ruleMatcher outside of service worker
+        // TODO: Add graphql requestData matching in matchRuleWithRequest too
+        matchRuleWithRequest(rule, requestDetails)?.isApplied === true
     );
   };
