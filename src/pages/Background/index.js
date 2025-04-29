@@ -48,6 +48,7 @@ function toggleOverride(request, sendResponse) {
     const { id } = request;
     if (overrides[id]) {
         overrides[id].isActive = !overrides[id].isActive;
+        console.log("isActive " + overrides[id].isActive);
         saveOverridesToStorage();
         sendResponse({ success: true });
         console.log('Override toggled:', overrides[id]);
@@ -59,7 +60,7 @@ function toggleOverride(request, sendResponse) {
 
 function updateOverride(request, sendResponse) {
     const { id, urlPattern, overridePayload } = request;
-    if (overrides[id]) {
+    if (overrides[id] && overrides[id].isActive) {
         overrides[id].urlPattern = urlPattern;
         overrides[id].payload = overridePayload;
         saveOverridesToStorage();
