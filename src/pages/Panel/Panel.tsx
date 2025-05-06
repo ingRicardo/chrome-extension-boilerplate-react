@@ -1,6 +1,8 @@
 import React from 'react';
 import './Panel.css';
 
+import NetworkTable from '../../components/NetworkTable';
+
 var links = [
   { endpoint: '/america' },
   { endpoint: '/canada' },
@@ -22,6 +24,9 @@ const Panel: React.FC = () => {
       <ul>
         {listItems}
       </ul>
+      <div>
+        <NetworkTable requests={[]} />
+      </div>
     </div>
   );
 };
