@@ -1,8 +1,5 @@
-// src/components/NetworkTable.tsx
 import React from 'react';
-
-
-import './NetworkTable.css'; // Assuming you create a CSS file for styles
+import './style.css';
 
 interface Request {
     id: string;

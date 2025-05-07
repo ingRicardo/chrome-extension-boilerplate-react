@@ -1,29 +1,12 @@
 import React from 'react';
 import './Panel.css';
-
 import NetworkTable from '../../components/NetworkTable';
-
-var links = [
-  { endpoint: '/america' },
-  { endpoint: '/canada' },
-  { endpoint: '/norway' },
-  { endpoint: '/bahamas' }
-]
 
 const Panel: React.FC = () => {
 
-
-  const listItems = links.map((link) =>
-    <li key={link.endpoint}>{link.endpoint}</li>
-  );
-
   return (
     <div className="container">
-      <h1>Dev Tools Panel v1</h1>
-      <p>Riky</p>
-      <ul>
-        {listItems}
-      </ul>
+      <h1>Dev Tools Panel</h1>
       <div>
         <NetworkTable requests={[]} />
       </div>
