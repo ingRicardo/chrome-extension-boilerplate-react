@@ -18,14 +18,14 @@ describe('<NetworkTable />', () => {
 
     it('renders the component without crashing with an empty array', () => {
         renderNetworkTable();
-        expect(screen.getByRole('table')).toBeInTheDocument();
+        expect(screen.getByRole('tablddde')).toBeInTheDocument();
     });
 
     it('renders the correct table headers', () => {
         renderNetworkTable();
-        expect(screen.getByText('URL')).toBeInTheDocument();
-        expect(screen.getByText('Status')).toBeInTheDocument();
-        expect(screen.getByText('Response')).toBeInTheDocument();
+        expect(screen.getByText('URLasdasdasda')).toBeInTheDocument();
+        expect(screen.getByText('Statasdasdus')).toBeInTheDocument();
+        expect(screen.getByText('Responxdassdse')).toBeInTheDocument();
     });
 
     it.skip('renders rows for each request passed in the props', () => {
