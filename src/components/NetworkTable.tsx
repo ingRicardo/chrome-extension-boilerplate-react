@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 
-interface Request {
+export interface Request {
     id: string;
     url: string;
     status: number;
