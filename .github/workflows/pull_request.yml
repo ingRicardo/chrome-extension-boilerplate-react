@@ -25,7 +25,7 @@ jobs:
         run: npm ci
       
       - name: type check
-        rum: npm run type-chck
+        run: npm run type-chck
 
       - name: Build
         run: npm run build
