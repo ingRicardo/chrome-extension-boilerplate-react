@@ -23,9 +23,12 @@ jobs:
       
       - name: Install deps
         run: npm ci
+      
+      - name: type check
+        rum: npm run type-chck
 
       - name: Build
         run: npm run build
-
+     
       - name: Test
         run: npm test
