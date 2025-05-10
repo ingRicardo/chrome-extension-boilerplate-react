@@ -18,7 +18,11 @@
 Added static content to dev tools panel in this case it is an array of strings
 and a loop to display the list in the page and changed  added a version in the title
 
+## Generate a build 
+`npm run build`
+
 ### Generate Certificates in Windows 
+
 mkcert (easiest)
 powershell
 ```
