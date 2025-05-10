@@ -21,7 +21,7 @@ and a loop to display the list in the page and changed  added a version in the t
 ## Generate a build 
 `npm run build`
 
-### Generate Certificates in Windows 
+### Generate Certificates
 
 mkcert (easiest)
 powershell
