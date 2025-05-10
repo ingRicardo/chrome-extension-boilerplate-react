@@ -27,8 +27,9 @@ jobs:
       - name: type check
         run: npm run type-chck
 
+      - name: Test
+        run: npm test
+
       - name: Build
         run: npm run build
      
-      - name: Test
-        run: npm test
