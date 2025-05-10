@@ -1,0 +1,35 @@
+name: Pull Request
+
+on: 
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  build-quality:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]   # adjust as needed
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install deps
+        run: npm ci
+      
+      - name: type check
+        run: npm run type-check
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+     

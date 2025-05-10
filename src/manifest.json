@@ -1,9 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Extension with React & Webpack",
-  "description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
-  "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
+  "name": "Response Overrider",
+  "description": "DevTools panel + content script that rewrites fetch/XHR responses",
+  "version": "0.1.0",
+  "devtools_page": "devtools.html",
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
@@ -14,18 +17,15 @@
   "icons": {
     "128": "icon-128.png"
   },
+  "permissions": ["scripting", "storage"],
+  "host_permissions": ["<all_urls>"],
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["<all_urls>"],
       "js": ["contentScript.bundle.js"],
-      "css": ["content.styles.css"]
-    }
-  ],
-  "devtools_page": "devtools.html",
-  "web_accessible_resources": [
-    {
-      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
-      "matches": []
+      "css": ["content.styles.css"],
+      "run_at": "document_start",
+      "world": "MAIN"
     }
   ]
 }
